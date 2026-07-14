@@ -103,6 +103,7 @@ export default function HomeScreen({ activeTab, onTabChange, onOpenCamera }: Pro
           {([
             { tab: 'home' as Tab, Icon: Home, label: 'Home' },
             { tab: 'explore' as Tab, Icon: Search, label: 'Explore' },
+            { tab: 'report' as Tab, Icon: Camera, label: 'Report' },
             { tab: 'profile' as Tab, Icon: User, label: 'Profile' },
           ]).map(({ tab, Icon, label }) => {
             const isActive = activeTab === tab;
