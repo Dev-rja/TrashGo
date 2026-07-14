@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { MapPinOff, Camera, Home, Search, User, Zap, AlertCircle } from 'lucide-react';
 import profileAvatar from '../assets/images/image copy copy copy copy copy.png';
+import LocationPermissionModal from '../components/LocationPermissionModal';
 
 type Tab = 'home' | 'explore' | 'profile';
 
@@ -9,6 +11,8 @@ interface Props {
 }
 
 export default function HomeScreen({ activeTab = 'home', onTabChange }: Props) {
+  const [showLocationModal, setShowLocationModal] = useState(false);
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Top header */}
@@ -54,7 +58,10 @@ export default function HomeScreen({ activeTab = 'home', onTabChange }: Props) {
             <p className="text-[13px] text-gray-500 text-center leading-snug mb-5">
               Enable GPS to pin your environment report accurately.
             </p>
-            <button className="px-6 py-2.5 rounded-xl border border-gray-300 bg-white text-[14px] font-semibold text-gray-700 hover:bg-gray-50 active:scale-[0.98] transition-all duration-200 shadow-sm">
+            <button
+              onClick={() => setShowLocationModal(true)}
+              className="px-6 py-2.5 rounded-xl border border-gray-300 bg-white text-[14px] font-semibold text-gray-700 hover:bg-gray-50 active:scale-[0.98] transition-all duration-200 shadow-sm"
+            >
               Enable location
             </button>
           </div>
@@ -122,6 +129,14 @@ export default function HomeScreen({ activeTab = 'home', onTabChange }: Props) {
           })}
         </div>
       </div>
+
+      {showLocationModal && (
+        <LocationPermissionModal
+          onAllow={() => setShowLocationModal(false)}
+          onSkip={() => setShowLocationModal(false)}
+          onClose={() => setShowLocationModal(false)}
+        />
+      )}
     </div>
   );
 }
