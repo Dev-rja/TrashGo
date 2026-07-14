@@ -3,6 +3,7 @@ import HomeScreen from './screens/HomeScreen';
 import ReportScreen from './screens/ReportScreen';
 import CameraScreen from './screens/CameraScreen';
 import ConfirmHotspotScreen from './screens/ConfirmHotspotScreen';
+import HotspotReportedScreen from './screens/HotspotReportedScreen';
 
 type Screen = 'home' | 'report';
 type Tab = 'home' | 'explore' | 'report' | 'profile';
@@ -13,6 +14,7 @@ function App() {
   const [showCamera, setShowCamera] = useState(false);
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showReported, setShowReported] = useState(false);
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
@@ -38,6 +40,11 @@ function App() {
   const handleConfirm = () => {
     setShowConfirm(false);
     setCapturedPhoto(null);
+    setShowReported(true);
+  };
+
+  const handleCloseReported = () => {
+    setShowReported(false);
   };
 
   return (
@@ -67,11 +74,16 @@ function App() {
         {showConfirm && (
           <ConfirmHotspotScreen
             photo={capturedPhoto ?? undefined}
-            onBack={handleConfirm}
+            onBack={() => {
+              setShowConfirm(false);
+              setCapturedPhoto(null);
+            }}
             onRetake={handleRetake}
             onConfirm={handleConfirm}
           />
         )}
+
+        {showReported && <HotspotReportedScreen onClose={handleCloseReported} />}
       </div>
     </div>
   );
