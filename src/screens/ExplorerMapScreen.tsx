@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { ChevronLeft, Zap, Plus, Minus, Navigation, List, MapPin, AlertTriangle } from 'lucide-react';
+import HotspotDetailScreen from './HotspotDetailScreen';
 
 interface Props {
   onBack: () => void;
 }
 
 export default function ExplorerMapScreen({ onBack }: Props) {
+  const [showDetail, setShowDetail] = useState(false);
   return (
     <div className="absolute inset-0 z-[960] flex flex-col overflow-hidden bg-gray-100">
       {/* Header */}
@@ -74,7 +77,10 @@ export default function ExplorerMapScreen({ onBack }: Props) {
         </div>
 
         {/* Info card popup */}
-        <div className="absolute left-5 top-[36%] w-[210px]">
+        <button
+          onClick={() => setShowDetail(true)}
+          className="absolute left-5 top-[36%] w-[210px] text-left active:scale-[0.98] transition-transform"
+        >
           <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl">
             <div className="relative h-24 w-full">
               <img
@@ -96,7 +102,7 @@ export default function ExplorerMapScreen({ onBack }: Props) {
           </div>
           {/* pointer tail */}
           <div className="mx-auto h-3 w-3 -translate-y-1.5 rotate-45 border-b border-r border-gray-100 bg-white" />
-        </div>
+        </button>
 
         {/* Map controls (right) */}
         <div className="absolute right-4 top-[26%] flex flex-col gap-3">
@@ -143,6 +149,8 @@ export default function ExplorerMapScreen({ onBack }: Props) {
           </button>
         </div>
       </div>
+
+      {showDetail && <HotspotDetailScreen onBack={() => setShowDetail(false)} />}
     </div>
   );
 }
