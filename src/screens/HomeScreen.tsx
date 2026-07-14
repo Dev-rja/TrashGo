@@ -7,15 +7,16 @@ type Tab = 'home' | 'explore' | 'report' | 'profile';
 interface Props {
   activeTab: Tab;
   onTabChange: (tab: Tab) => void;
+  onOpenCamera: () => void;
 }
 
-export default function HomeScreen({ activeTab, onTabChange }: Props) {
+export default function HomeScreen({ activeTab, onTabChange, onOpenCamera }: Props) {
   const [showLocationModal, setShowLocationModal] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100">
+      <div className="flex items-center justify-between px-4 py-4 bg-white border-b border-gray-100">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-brand-500 flex items-center justify-center shadow-sm shadow-brand-200">
             <Zap size={18} className="text-white" fill="white" />
@@ -25,55 +26,74 @@ export default function HomeScreen({ activeTab, onTabChange }: Props) {
           </span>
         </div>
         <div className="relative">
-          <div className="w-9 h-9 rounded-full bg-brand-100 flex items-center justify-center">
-            <User size={18} className="text-brand-600" />
-          </div>
+          <img
+            src="/avatar.png"
+            alt="Profile"
+            className="w-9 h-9 rounded-full object-cover bg-gray-200"
+          />
           <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-brand-500 border-2 border-white" />
         </div>
       </div>
 
-      {/* Map area */}
-      <div className="relative flex-1 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-50 via-gray-100 to-gray-200" />
-        <div className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: 'radial-gradient(circle at 30% 40%, #86efac 0%, transparent 40%), radial-gradient(circle at 70% 60%, #bbf7d0 0%, transparent 40%)',
-          }}
-        />
-        <div className="relative flex flex-col items-center justify-center h-full px-6">
-          <div className="w-20 h-20 rounded-full bg-white/80 backdrop-blur flex items-center justify-center mb-5 shadow-lg">
-            <MapPinOff size={36} className="text-gray-400" strokeWidth={1.5} />
+      {/* Content */}
+      <div className="flex-1 px-4 pt-4">
+        {/* Location unavailable card */}
+        <div className="relative overflow-hidden rounded-2xl border border-gray-100 bg-gray-50">
+          {/* Grid background */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px)',
+              backgroundSize: '52px 52px',
+            }}
+          />
+          <div className="relative flex flex-col items-center justify-center px-6 py-10">
+            <div className="w-16 h-16 rounded-full bg-gray-200/70 flex items-center justify-center mb-5">
+              <MapPinOff size={28} className="text-gray-400" strokeWidth={1.75} />
+            </div>
+            <h2 className="text-[18px] font-bold text-gray-800 mb-2">Location unavailable</h2>
+            <p className="text-[14px] text-gray-500 text-center mb-6 max-w-[220px] leading-relaxed">
+              Enable GPS to pin your environment report accurately.
+            </p>
+            <button
+              onClick={() => setShowLocationModal(true)}
+              className="px-6 py-2.5 rounded-lg border border-gray-300 bg-white text-[14px] font-semibold text-gray-800 hover:bg-gray-50 active:scale-[0.98] transition-all duration-200"
+            >
+              Enable location
+            </button>
           </div>
-          <h2 className="text-[18px] font-bold text-gray-700 mb-2">Location not enabled</h2>
-          <p className="text-[14px] text-gray-500 text-center mb-6 max-w-[240px]">
-            Enable location to see waste hotspots near you on the map
-          </p>
-          <button
-            onClick={() => setShowLocationModal(true)}
-            className="px-6 py-2.5 rounded-xl border border-gray-300 bg-white text-[14px] font-semibold text-gray-700 hover:bg-gray-50 active:scale-[0.98] transition-all duration-200 shadow-sm"
-          >
-            Enable location
-          </button>
         </div>
-      </div>
 
-      {/* Stats cards */}
-      <div className="bg-white px-4 pt-4 pb-3">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-brand-50 p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <AlertCircle size={16} className="text-brand-600" />
-              <span className="text-[12px] font-semibold text-brand-700">Active Reports</span>
-            </div>
-            <p className="text-[28px] font-extrabold text-brand-700">12</p>
+        {/* GPS signal status */}
+        <div className="flex items-center gap-2 mt-3 px-1">
+          <span className="w-2 h-2 rounded-full bg-gray-300" />
+          <span className="text-[12px] text-gray-500">No active GPS signal detected</span>
+        </div>
+
+        {/* GPS Disabled warning */}
+        <div className="mt-4 flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
+          <AlertCircle size={18} className="text-amber-500 shrink-0 mt-0.5" />
+          <div>
+            <p className="text-[14px] font-bold text-gray-800 mb-1">GPS Disabled</p>
+            <p className="text-[13px] text-gray-500 leading-relaxed">
+              Location is needed for precise pinning. Reports without coordinates may take longer to
+              process.
+            </p>
           </div>
-          <div className="rounded-2xl bg-orange-50 p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <Zap size={16} className="text-orange-500" />
-              <span className="text-[12px] font-semibold text-orange-600">Resolved</span>
-            </div>
-            <p className="text-[28px] font-extrabold text-orange-600">48</p>
-          </div>
+        </div>
+
+        {/* Report hotspot */}
+        <div className="flex flex-col items-center mt-16">
+          <button
+            onClick={onOpenCamera}
+            className="w-28 h-28 rounded-full bg-brand-500 flex items-center justify-center shadow-lg shadow-brand-200 active:scale-95 transition-transform duration-200"
+          >
+            <Camera size={40} className="text-gray-900" strokeWidth={2} />
+          </button>
+          <span className="mt-4 text-[16px] font-extrabold text-brand-500 tracking-tight">
+            REPORT HOTSPOT
+          </span>
         </div>
       </div>
 
@@ -83,7 +103,6 @@ export default function HomeScreen({ activeTab, onTabChange }: Props) {
           {([
             { tab: 'home' as Tab, Icon: Home, label: 'Home' },
             { tab: 'explore' as Tab, Icon: Search, label: 'Explore' },
-            { tab: 'report' as Tab, Icon: Camera, label: 'Report' },
             { tab: 'profile' as Tab, Icon: User, label: 'Profile' },
           ]).map(({ tab, Icon, label }) => {
             const isActive = activeTab === tab;
@@ -95,10 +114,12 @@ export default function HomeScreen({ activeTab, onTabChange }: Props) {
               >
                 <Icon
                   size={24}
-                  className={isActive ? 'text-brand-500' : 'text-gray-400'}
+                  className={isActive ? 'text-brand-500' : 'text-gray-500'}
                   strokeWidth={isActive ? 2.5 : 1.8}
                 />
-                <span className={`text-[11px] font-medium ${isActive ? 'text-brand-500' : 'text-gray-400'}`}>
+                <span
+                  className={`text-[11px] font-medium ${isActive ? 'text-brand-500' : 'text-gray-500'}`}
+                >
                   {label}
                 </span>
               </button>
