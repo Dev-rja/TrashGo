@@ -2,9 +2,10 @@ import { useState } from 'react';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/HomeScreen';
+import ReportScreen from './screens/ReportScreen';
 
-type Screen = 'signin' | 'signup' | 'home';
-type Tab = 'home' | 'explore' | 'profile';
+type Screen = 'signin' | 'signup' | 'home' | 'report';
+type Tab = 'home' | 'explore' | 'report' | 'profile';
 
 function App() {
   const [screen, setScreen] = useState<Screen>('home');
@@ -17,8 +18,13 @@ function App() {
           <SignInScreen onSignUp={() => setScreen('signup')} />
         ) : screen === 'signup' ? (
           <SignUpScreen onBack={() => setScreen('signin')} />
+        ) : screen === 'report' ? (
+          <ReportScreen activeTab={activeTab} onTabChange={setActiveTab} />
         ) : (
-          <HomeScreen activeTab={activeTab} onTabChange={setActiveTab} />
+          <HomeScreen activeTab={activeTab} onTabChange={(tab) => {
+            setActiveTab(tab);
+            if (tab === 'report') setScreen('report');
+          }} />
         )}
       </div>
     </div>

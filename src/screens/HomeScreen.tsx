@@ -3,7 +3,7 @@ import { MapPinOff, Camera, Home, Search, User, Zap, AlertCircle } from 'lucide-
 import profileAvatar from '../assets/images/image copy copy copy copy copy.png';
 import LocationPermissionModal from '../components/LocationPermissionModal';
 
-type Tab = 'home' | 'explore' | 'profile';
+type Tab = 'home' | 'explore' | 'report' | 'profile';
 
 interface Props {
   activeTab?: Tab;
@@ -102,6 +102,7 @@ export default function HomeScreen({ activeTab = 'home', onTabChange }: Props) {
             [
               { tab: 'home' as Tab, Icon: Home, label: 'Home' },
               { tab: 'explore' as Tab, Icon: Search, label: 'Explore' },
+              { tab: 'report' as Tab, Icon: Camera, label: 'Report' },
               { tab: 'profile' as Tab, Icon: User, label: 'Profile' },
             ] as const
           ).map(({ tab, Icon, label }) => {
