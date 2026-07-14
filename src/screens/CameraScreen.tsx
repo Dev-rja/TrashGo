@@ -46,7 +46,10 @@ export default function CameraScreen({ onClose, onCapture }: Props) {
 
   const handleCapture = () => {
     const video = videoRef.current;
-    if (!video) return;
+    if (error || !video || !video.videoWidth) {
+      onCapture?.('');
+      return;
+    }
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth || 720;
     canvas.height = video.videoHeight || 1280;

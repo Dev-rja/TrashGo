@@ -2,6 +2,7 @@ import { useState } from 'react';
 import HomeScreen from './screens/HomeScreen';
 import ReportScreen from './screens/ReportScreen';
 import CameraScreen from './screens/CameraScreen';
+import ConfirmHotspotScreen from './screens/ConfirmHotspotScreen';
 
 type Screen = 'home' | 'report';
 type Tab = 'home' | 'explore' | 'report' | 'profile';
@@ -10,6 +11,8 @@ function App() {
   const [screen, setScreen] = useState<Screen>('home');
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [showCamera, setShowCamera] = useState(false);
+  const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
@@ -18,6 +21,23 @@ function App() {
     } else {
       setScreen('home');
     }
+  };
+
+  const handleCapture = (dataUrl: string) => {
+    setCapturedPhoto(dataUrl);
+    setShowCamera(false);
+    setShowConfirm(true);
+  };
+
+  const handleRetake = () => {
+    setShowConfirm(false);
+    setCapturedPhoto(null);
+    setShowCamera(true);
+  };
+
+  const handleConfirm = () => {
+    setShowConfirm(false);
+    setCapturedPhoto(null);
   };
 
   return (
@@ -37,7 +57,21 @@ function App() {
           />
         )}
 
-        {showCamera && <CameraScreen onClose={() => setShowCamera(false)} />}
+        {showCamera && (
+          <CameraScreen
+            onClose={() => setShowCamera(false)}
+            onCapture={handleCapture}
+          />
+        )}
+
+        {showConfirm && (
+          <ConfirmHotspotScreen
+            photo={capturedPhoto ?? undefined}
+            onBack={handleConfirm}
+            onRetake={handleRetake}
+            onConfirm={handleConfirm}
+          />
+        )}
       </div>
     </div>
   );
