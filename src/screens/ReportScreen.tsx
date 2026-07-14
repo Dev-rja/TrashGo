@@ -8,6 +8,7 @@ type Tab = 'home' | 'explore' | 'report' | 'profile';
 interface Props {
   activeTab: Tab;
   onTabChange: (tab: Tab) => void;
+  onOpenCamera: () => void;
 }
 
 // Fix Leaflet default marker icon paths for bundlers
@@ -36,7 +37,7 @@ function RecenterMap({ position }: { position: [number, number] }) {
   return null;
 }
 
-export default function ReportScreen({ activeTab, onTabChange }: Props) {
+export default function ReportScreen({ activeTab, onTabChange, onOpenCamera }: Props) {
   // Default to Manila; will update when GPS resolves
   const [position, setPosition] = useState<[number, number]>([14.5995, 120.9845]);
   const [hasGps, setHasGps] = useState(false);
@@ -170,7 +171,7 @@ export default function ReportScreen({ activeTab, onTabChange }: Props) {
 
         {/* Camera CTA */}
         <div className="flex flex-col items-center mt-10 mb-2 gap-4">
-          <button className="w-24 h-24 rounded-full bg-brand-500 flex items-center justify-center shadow-lg shadow-brand-200 hover:bg-brand-600 active:scale-[0.97] transition-all duration-200">
+          <button onClick={onOpenCamera} className="w-24 h-24 rounded-full bg-brand-500 flex items-center justify-center shadow-lg shadow-brand-200 hover:bg-brand-600 active:scale-[0.97] transition-all duration-200">
             <Camera size={40} className="text-white" strokeWidth={1.8} />
           </button>
           <span className="text-[13px] font-extrabold text-brand-500 tracking-widest uppercase">
