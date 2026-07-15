@@ -5,8 +5,9 @@ import ProfileScreen from './screens/ProfileScreen';
 import CameraScreen from './screens/CameraScreen';
 import ConfirmHotspotScreen from './screens/ConfirmHotspotScreen';
 import HotspotReportedScreen from './screens/HotspotReportedScreen';
+import UploadAftermathScreen from './screens/UploadAftermathScreen';
 
-type Screen = 'home' | 'report' | 'profile';
+type Screen = 'home' | 'report' | 'profile' | 'upload';
 type Tab = 'home' | 'explore' | 'report' | 'profile';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showReported, setShowReported] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
@@ -60,7 +62,7 @@ function App() {
             onOpenCamera={() => setShowCamera(true)}
           />
         ) : screen === 'profile' ? (
-          <ProfileScreen activeTab={activeTab} onTabChange={handleTabChange} />
+          <ProfileScreen activeTab={activeTab} onTabChange={handleTabChange} onOpenUpload={() => setShowUpload(true)} />
         ) : (
           <HomeScreen
             activeTab={activeTab}
@@ -89,6 +91,13 @@ function App() {
         )}
 
         {showReported && <HotspotReportedScreen onClose={handleCloseReported} />}
+
+        {showUpload && (
+          <UploadAftermathScreen
+            onBack={() => setShowUpload(false)}
+            onSubmit={() => setShowUpload(false)}
+          />
+        )}
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ type Tab = 'home' | 'explore' | 'report' | 'profile';
 interface Props {
   activeTab: Tab;
   onTabChange: (tab: Tab) => void;
+  onOpenUpload?: () => void;
   role?: Role;
 }
 
@@ -34,7 +35,7 @@ const menuItems = [
   { label: 'Help & Support', Icon: HelpCircle },
 ];
 
-export default function ProfileScreen({ activeTab, onTabChange, role = 'correspondent' }: Props) {
+export default function ProfileScreen({ activeTab, onTabChange, onOpenUpload, role = 'correspondent' }: Props) {
   const [selectedRole, setSelectedRole] = useState<Role>(role);
   const isCorrespondent = selectedRole === 'correspondent';
 
@@ -165,7 +166,13 @@ export default function ProfileScreen({ activeTab, onTabChange, role = 'correspo
 
           <div className="rounded-2xl bg-white border border-gray-100 overflow-hidden divide-y divide-gray-50">
             {activity.map((item) => (
-              <div key={item.id} className="flex items-center gap-3 px-4 py-3.5">
+              <button
+                key={item.id}
+                onClick={() => {
+                  if (!isCorrespondent) onOpenUpload?.();
+                }}
+                className="flex items-center gap-3 w-full px-4 py-3.5 text-left active:bg-gray-50 transition-colors"
+              >
                 {/* Icon circle — matches modal's info icon style */}
                 <div className="w-10 h-10 rounded-full bg-brand-50 border border-brand-100 flex items-center justify-center shrink-0">
                   {item.status === 'pending'
@@ -190,7 +197,7 @@ export default function ProfileScreen({ activeTab, onTabChange, role = 'correspo
                     </span>
                   )}
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
