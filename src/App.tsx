@@ -4,7 +4,6 @@ import ReportScreen from './screens/ReportScreen';
 import CameraScreen from './screens/CameraScreen';
 import ConfirmHotspotScreen from './screens/ConfirmHotspotScreen';
 import HotspotReportedScreen from './screens/HotspotReportedScreen';
-import ExplorerMapScreen from './screens/ExplorerMapScreen';
 
 type Screen = 'home' | 'report';
 type Tab = 'home' | 'explore' | 'report' | 'profile';
@@ -16,7 +15,6 @@ function App() {
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showReported, setShowReported] = useState(false);
-  const [showExplorer, setShowExplorer] = useState(false);
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
@@ -47,11 +45,6 @@ function App() {
 
   const handleCloseReported = () => {
     setShowReported(false);
-  };
-
-  const handleViewMap = () => {
-    setShowReported(false);
-    setShowExplorer(true);
   };
 
   return (
@@ -90,11 +83,7 @@ function App() {
           />
         )}
 
-        {showReported && (
-          <HotspotReportedScreen onClose={handleCloseReported} onViewMap={handleViewMap} />
-        )}
-
-        {showExplorer && <ExplorerMapScreen onBack={() => setShowExplorer(false)} />}
+        {showReported && <HotspotReportedScreen onClose={handleCloseReported} />}
       </div>
     </div>
   );
