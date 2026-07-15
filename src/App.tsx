@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import HomeScreen from './screens/HomeScreen';
 import ReportScreen from './screens/ReportScreen';
+import ProfileScreen from './screens/ProfileScreen';
 import CameraScreen from './screens/CameraScreen';
 import ConfirmHotspotScreen from './screens/ConfirmHotspotScreen';
 import HotspotReportedScreen from './screens/HotspotReportedScreen';
 
-type Screen = 'home' | 'report';
+type Screen = 'home' | 'report' | 'profile';
 type Tab = 'home' | 'explore' | 'report' | 'profile';
 
 function App() {
@@ -20,6 +21,8 @@ function App() {
     setActiveTab(tab);
     if (tab === 'report') {
       setScreen('report');
+    } else if (tab === 'profile') {
+      setScreen('profile');
     } else {
       setScreen('home');
     }
@@ -56,6 +59,8 @@ function App() {
             onTabChange={handleTabChange}
             onOpenCamera={() => setShowCamera(true)}
           />
+        ) : screen === 'profile' ? (
+          <ProfileScreen activeTab={activeTab} onTabChange={handleTabChange} />
         ) : (
           <HomeScreen
             activeTab={activeTab}
