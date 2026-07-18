@@ -233,7 +233,6 @@ export default function ScheduledDrivesScreen({ onBack, onDriveSelect }: Props) 
                     </div>
 
                     <div className="flex flex-col items-end gap-1.5 shrink-0">
-                      <span className="text-[13px] font-bold text-brand-600">{drive.earnings}</span>
                       <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${cfg.text} ${cfg.bg}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
                         {cfg.label}
