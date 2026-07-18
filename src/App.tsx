@@ -7,8 +7,9 @@ import ConfirmHotspotScreen from './screens/ConfirmHotspotScreen';
 import HotspotReportedScreen from './screens/HotspotReportedScreen';
 import UploadAftermathScreen from './screens/UploadAftermathScreen';
 import AftermathSubmittedScreen from './screens/AftermathSubmittedScreen';
+import ScheduledDrivesScreen from './screens/ScheduledDrivesScreen';
 
-type Screen = 'home' | 'report' | 'profile' | 'upload';
+type Screen = 'home' | 'report' | 'profile' | 'upload' | 'drives';
 type Tab = 'home' | 'explore' | 'report' | 'profile';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
   const [showReported, setShowReported] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [showSubmitted, setShowSubmitted] = useState(false);
+  const [showDrives, setShowDrives] = useState(false);
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
@@ -64,7 +66,7 @@ function App() {
             onOpenCamera={() => setShowCamera(true)}
           />
         ) : screen === 'profile' ? (
-          <ProfileScreen activeTab={activeTab} onTabChange={handleTabChange} onOpenUpload={() => setShowUpload(true)} />
+          <ProfileScreen activeTab={activeTab} onTabChange={handleTabChange} onOpenUpload={() => setShowUpload(true)} onOpenDrives={() => setShowDrives(true)} />
         ) : (
           <HomeScreen
             activeTab={activeTab}
@@ -113,6 +115,10 @@ function App() {
               setActiveTab('home');
             }}
           />
+        )}
+
+        {showDrives && (
+          <ScheduledDrivesScreen onBack={() => setShowDrives(false)} />
         )}
       </div>
     </div>

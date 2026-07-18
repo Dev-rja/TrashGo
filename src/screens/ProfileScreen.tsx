@@ -2,10 +2,9 @@ import { useState } from 'react';
 import {
   Home, Search, User, Zap, ChevronRight,
   MapPin, Trash2, CheckCircle2, Clock,
-  Wallet, Bell, HelpCircle, LogOut, Camera,
-  Leaf, Settings, Shield,
+  Bell, HelpCircle, LogOut, Camera,
+  Leaf, Settings, Shield, Calendar,
 } from 'lucide-react';
-
 type Role = 'correspondent' | 'cleanfluencer';
 type Tab = 'home' | 'explore' | 'report' | 'profile';
 
@@ -13,6 +12,7 @@ interface Props {
   activeTab: Tab;
   onTabChange: (tab: Tab) => void;
   onOpenUpload?: () => void;
+  onOpenDrives?: () => void;
   role?: Role;
 }
 
@@ -35,12 +35,12 @@ const menuItems = [
   { label: 'Help & Support', Icon: HelpCircle },
 ];
 
-export default function ProfileScreen({ activeTab, onTabChange, onOpenUpload, role = 'correspondent' }: Props) {
+export default function ProfileScreen({ activeTab, onTabChange, onOpenUpload, onOpenDrives, role = 'correspondent' }: Props) {
   const [selectedRole, setSelectedRole] = useState<Role>(role);
   const isCorrespondent = selectedRole === 'correspondent';
 
   const name = isCorrespondent ? 'John Doe' : 'Clean Hero';
-  const handle = isCorrespondent ? '@johndoe · Manila, PH' : '@cleanhero · Manila, PH';
+  const handle = isCorrespondent ? '@johndoe - Manila, PH' : '@cleanhero - Carmen, CDO';
   const activity = isCorrespondent ? correspondentActivity : cleanfluencerActivity;
 
   return (
@@ -88,11 +88,15 @@ export default function ProfileScreen({ activeTab, onTabChange, onOpenUpload, ro
             <h1 className="text-[22px] font-extrabold text-gray-900">{name}</h1>
             <p className="text-[13px] text-gray-400 mt-1">{handle}</p>
 
-            {/* Role badge */}
-            <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-1.5 text-[12px] font-bold text-brand-700">
+            {/* Role badge — cleanfluencer uses white bg with green border per reference */}
+            <span className={`mt-3 inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-[13px] font-bold ${
+              isCorrespondent
+                ? 'border-brand-200 bg-brand-50 text-brand-700'
+                : 'border-brand-300 bg-white text-brand-600'
+            }`}>
               {isCorrespondent
-                ? <><MapPin size={12} /> Correspondent</>
-                : <><Leaf size={12} /> Cleanfluencer</>
+                ? <><MapPin size={13} /> Correspondent</>
+                : <><Leaf size={13} /> Cleanfluencer</>
               }
             </span>
           </div>
@@ -137,10 +141,9 @@ export default function ProfileScreen({ activeTab, onTabChange, onOpenUpload, ro
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-3 divide-x divide-gray-100">
+            <div className="grid grid-cols-2 divide-x divide-gray-100">
               {[
                 { label: 'Cleaned', value: '37', Icon: CheckCircle2 },
-                { label: 'Earned', value: '$1.2k', Icon: Wallet },
                 { label: 'Rating', value: '4.9', Icon: Leaf },
               ].map(({ label, value, Icon }) => (
                 <div key={label} className="flex flex-col items-center py-5 gap-2">
@@ -217,6 +220,19 @@ export default function ProfileScreen({ activeTab, onTabChange, onOpenUpload, ro
             </button>
           ))}
         </div>
+
+        {/* View Scheduled Drives — cleanfluencer only */}
+        {!isCorrespondent && (
+          <div className="mt-4 mx-4">
+            <button
+              onClick={onOpenDrives}
+              className="flex items-center justify-center gap-2 w-full h-14 rounded-2xl border-2 border-brand-500 bg-white text-[15px] font-bold text-brand-600 active:scale-[0.98] transition-transform"
+            >
+              <Calendar size={18} />
+              View Scheduled Drives
+            </button>
+          </div>
+        )}
 
         {/* Log out — matches Allow & Continue button style but destructive */}
         <div className="mt-4 mx-4">
